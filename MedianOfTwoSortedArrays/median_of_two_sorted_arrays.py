@@ -2,37 +2,46 @@ from typing import List
 
 class Solution:
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        num_iterations_to_median = (len(nums1) + len(nums2)) // 2
+        num_iterations_to_median += 1
+
+        need_to_average = False if (len(nums1) + len(nums2)) % 2 else True
+
         index1 = 0
         index2 = 0
 
-        total_len = len(nums1) + len(nums2)
-        median_index = total_len // 2
-        need_to_get_average = False
-        if total_len % 2:
-            need_to_get_average = True
+        previous_median = None
+        median = None
+        for _ in range(num_iterations_to_median):
+            previous_median = median
+            if index2 >= len(nums2):
+                median = nums1[index1]
+                index1 += 1
+            elif index1 >= len(nums1):
+                median = nums2[index2]
+                index2 += 1
+            elif nums1[index1] < nums2[index2]:
+                median = nums1[index1]
+                index1 += 1
+            else:
+                median = nums2[index2]
+                index2 += 1
 
-
-        median = 0
-        logical_index1 = 0
-        logical_index2 = 0
-        middle = 0
-        while True:
-            if nums1[index1] <= nums2[index2]:
-                if index1 == len(nums1) - 1:
-                    index2 += 1
-                else:
-                    index1 += 1
-            elif nums2[index2] < nums1[index1]:
-                if index2 == len(nums2) - 1:
-                    index1 += 1
-                else:
-                    index2 += 1
-            count += 1
-            if count == median_index:
-                if nums1[index1] <= nums2[index2]:
-                    median = nums1[index1]
-                else:
-                    median = nums2[index2]
-                break
-        
+        if need_to_average:
+            median = (previous_median + median) / 2
         return median
+
+
+#######################################################################################
+#
+# simple solution
+#
+# import itertools
+# class Solution:
+#     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+#         sorted_list = sorted(itertools.chain(nums1, nums2))
+#         median_index = len(sorted_list) // 2
+#         if len(sorted_list) % 2 == 0:
+#             return (sorted_list[median_index-1] + sorted_list[median_index]) / 2
+#         else:
+#             return sorted_list[median_index]

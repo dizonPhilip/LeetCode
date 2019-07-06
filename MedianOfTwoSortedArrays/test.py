@@ -29,5 +29,11 @@ class MedianOfTwoSortedArraysTest(unittest.TestCase):
         ret = self.solution.findMedianSortedArrays(nums1, nums2)
         self.assertEqual(5, ret)
 
+    def test_5(self):
+        nums1 = [3,4]
+        nums2 = [1,2]
+        ret = self.solution.findMedianSortedArrays(nums1, nums2)
+        self.assertEqual(2.5, ret)
+
 if __name__ == "__main__":
     unittest.main()
